@@ -192,7 +192,7 @@ void ESP32Camera::setup() {
   global_esp32_camera = this;
 
   /* initialize time to now */
-  this->last_update_ = esp_timer_get_time();
+  this->last_update_ = timer_gettime();
 
   /* initialize camera */
   esp_err_t err = esp_camera_init(this->frame_size, 1000/this->max_update_interval_); // mui=1000/fps. error starts with 60 fps but it is unrealistic already
@@ -297,7 +297,7 @@ void ESP32Camera::loop() {
   }
 
   // request idle image every idle_update_interval
-  const uint64_t now = esp_timer_get_time() / 1000;
+  const uint64_t now = timer_gettime() / 1000;
   if (this->idle_update_interval_ != 0 && now - this->last_idle_request_ > this->idle_update_interval_) {
     this->last_idle_request_ = now;
     this->request_image(IDLE);
